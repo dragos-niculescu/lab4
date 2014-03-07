@@ -1,8 +1,8 @@
 package ro.pub.cs.pdsd.lab4;
 
 import java.util.ArrayList;
-
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -41,6 +41,7 @@ class Personaj
     } 
 } 
  
+
 public class MainActivity extends ListActivity
 {
     ArrayList<Personaj> personaje;
@@ -49,12 +50,24 @@ public class MainActivity extends ListActivity
     @Override
     public void onCreate (Bundle savedInstanceBundle)
     {
+    	String nume = null, film = null; 
+    	
     	super.onCreate (savedInstanceBundle);
+    	
+    	setContentView (R.layout.activity_main);
+    	Intent myIntent = getIntent();
+    	
+    	if(myIntent != null){
+    		nume = myIntent.getStringExtra("nume"); 
+        	film = myIntent.getStringExtra("film");
+    	}
+    	
+    	if(nume != null){
+    		adaugaFunnyGuy(nume, film);
+    	} else { 
         personaje = new ArrayList<Personaj>();
         adapter = new ArrayAdapter<Personaj>(this, android.R.layout.simple_list_item_1, personaje);
-        setContentView (R.layout.activity_main);
         setListAdapter (adapter);
- 
         // adaugam cateva personaje in lista
         adaugaFunnyGuy("Bugs Bunny", "Looney Toons");
         adaugaFunnyGuy("Fred Flinstone", "The Flinstones");
@@ -67,9 +80,9 @@ public class MainActivity extends ListActivity
         adaugaFunnyGuy("Betty Rubble6", "The Flinstones");
         adaugaFunnyGuy("Betty Rubble7", "The Flinstones");
         adaugaFunnyGuy("Betty Rubble8", "The Flinstones");
-        
+    	}
     }
- 
+    
     @Override
     public void onListItemClick (ListView list, View v, int position, long id)
     {
@@ -77,7 +90,7 @@ public class MainActivity extends ListActivity
         Toast.makeText(MainActivity.this, personaje.get(position).nume, Toast.LENGTH_LONG).show();
     }
  
-    private void adaugaFunnyGuy (String nume, String desen)
+    public void adaugaFunnyGuy (String nume, String desen)
     {
         Personaj p = new Personaj ();
         p.nume = nume;
@@ -85,5 +98,12 @@ public class MainActivity extends ListActivity
         personaje.add (p);
         // acesta functie determina adaptorul sa ceara listei sa reafiseze continutul
         adapter.notifyDataSetChanged();
+    }
+    
+    public void adauga_personaj(View v)
+    {
+    	  Intent intent = new Intent(this, Activitate_get_nume.class);
+          startActivity(intent);
+
     }
 }
